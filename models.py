@@ -32,14 +32,11 @@ class Foto(models.Model):
     def __unicode__(self):
         return "Zdjecie nr: %s" % (int(self.pk))
 
-    def title(self):
-        return str(self.zdjecie.name)[6:]
+    #Tworzy link do miniaturki ktora sie wyswietla w adminie
 
-    def albums_(self):
-        lst = [x[1] for x in self.albumy.values_list()]
-        return unicode(join(lst, ', '))
     def miniaturka(self):
         return """<a href="/media/%s"><img src="/media/%s.410x410.%s" /></a>""" % ((self.zdjecie.name, self.zdjecie.name[:-4],self.zdjecie.name[-3:]))
+    #By nie omijac tagow html
     miniaturka.allow_tags = True
 
     def ISO(self):

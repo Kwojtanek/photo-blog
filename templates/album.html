@@ -1,0 +1,60 @@
+{% extends '_base.html' %}
+{% block title %} {{ albumy.tytul }} - Photo-trippin {% endblock %}
+{%  block zawartosc %}
+
+    {% with foto|first as zd %}
+    <div id="bg"><a href="#" class="nextImageBtn" title="next"></a><a href="#" class="prevImageBtn" title="previous"></a><img src="{{ zd.zdjecie.url_1920x1080 }}" width="1920" height="1080" id="bgimg" title="
+    <div><a href='../'><img src='/static/button-back.png'></a>
+        <ul><strong>MetaDane:</strong>
+            <li>ISO: {{ zd.ISO }} </li>
+            <li>Czas naświetlania:  {{ zd.ekspozycja }} </li>
+             <li>{{ zd.f }}</li>
+             <li><a href='{{zd.zdjecie.url_1920x1080 }}' download>Pobierz: <img src='/static/download.png'></a></li>
+        </ul>
+    </div>" /></div>
+    {%  endwith %}
+    <div id="preloader"><img src="/static/477.gif" width="128" height="128" /></div>
+    <div id="img_title"></div>
+    <div class="album_title"><img src='/static/button-albumy.png'>
+    <ul>
+        {% for a in wszystkie_albumy %}
+        <li><a href="../{{ a.pk }}"> {{ a.tytul }}</a></li>
+        {% endfor %}
+    </ul></div>
+    <div id="toolbar"><a href="#" title="Maximize" onClick="ImageViewMode('full');return false"><img src="/static/toolbar_fs_icon.png" width="50" height="50"  /></a></div>
+    <div id="thumbnails_wrapper">
+        <div id="outer_container">
+            <div class="thumbScroller">
+                <div class="container">
+                    {% for zdjecie in foto %}
+
+                    <div class="content">
+
+                        <div><a href="{{ zdjecie.zdjecie.url_1920x1080 }}"><img src="{{ zdjecie.zdjecie.url_410x410 }}" width="150" height="150" class="thumb" title="
+                        <div><a href='../'><img src='/static/button-back.png'></a>
+                            <ul><strong>MetaDane:</strong>
+                                <li>ISO:  {{ zdjecie.ISO }} </li>
+                                <li>Czas naświetlania: {{ zdjecie.ekspozycja }} </li>
+                                 <li>{{ zdjecie.f }}</li>
+                                 <li><a href='{{zdjecie.zdjecie.url_1920x1080 }}' download>Pobierz: <img src='/static/download.png'></a></li>
+                            </ul>
+                        </div>"></a></div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block script %}
+        <script>
+        var ttext;
+        $('img').hover(function(){
+        ttext = $(this).attr('title');
+        $(this).removeAttr('title');
+        },function(){
+        $(this).attr('title', ttext);
+        });
+        </script>
+{% endblock %}

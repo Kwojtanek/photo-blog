@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+{% block title %} Photo-tripping.com - Strona główna {% endblock %}
+{% block naglowek %}
+    <div id="home"></div>
+<header id="header" class="js_header">
+    <div class="logo"><a href="http://www.photo-tripping.com"><img src="/static/logo.png"></a></div>
+    <ul class="nav masthead-nav">
+        <li><a href="#galeria" class="scroll">Galeria</a></li>
+        <li><a href="#home" class="scroll">Home</a></li>
+        <li><a href="#kontakt" class="scroll" >Kontakt</a></li>
+    </ul>
+</header>
+{% endblock %}
+{% block zawartosc %}
+    <div id="preloader"><img src="/static/477.gif" width="128" height="128" /></div>
+<div id="slides">
+
+    <div class="slides-container">
+    {% for image in foto %}
+    <img src="{{ image.zdjecie.url_1920x1080 }}">
+    {% endfor %}
+    </div>
+    <nav class="slides-navigation">
+        <a href="#" class="next"><img src="/static/arrow-right.png"></a>
+        <a href="#" class="prev"><img src="/static/arrow-back.png"></a>
+    </nav>
+
+</div>
+    <div id="galeria" title="#galeria" style="height: 64px"></div>
+
+    <div class="albumy">
+        <div class="hr"></div>
+        <h1 class="text-center" style="color: #f5f5f5">Albumy</h1>
+    {% for album in albumy %}
+        <div class="album-foto wow bounceInUp animated">
+            {% with album.foto_set.all|first as zd %}
+                <a href="{{ album.pk }}">
+
+                        <img src="{{ zd.zdjecie.url_410x410 }}">
+                        <span class="napis"> {{ album.tytul }} </span>
+
+
+
+                </a>
+            {% endwith %}
+        </div>
+    {% endfor %}
+</div>
+<div class="kontakt">
+    <div id="kontakt"style='height: 67px'></div>
+    <div class="hr"></div>
+    <div class="kontakt-inner">
+    <span class="linki bounceIn wow animated"><ul><h1>Znajdź mnie na facebook'u:</h1>
+        <h3><li><a href="https://www.facebook.com/fototrippin">facebook.com/fototrippin</a> </li>
+        <a href="https://www.facebook.com/michal.wojtanek"><li>facebook.com/michal.wojtanek</a> </li></h3></ul></span>
+    <span class="formularz bounceIn wow animated"><h1>Napisz do mnie:</h1><form action="MAILTO:kwojtanek@gmail.com" method="post">
+        <span>Twój e-mail (opcjonalnie): <input type="text" name="email"></span>
+        <span><textarea name="message" rows="10" cols="50"></textarea></span>
+        <span><input type="submit" value="Wyślij"></span>
+
+    </form>
+    </span>
+
+</div>
+    </div>
+    <div class="footer">Created by wojtanekjakub@gmail.com</div>
+
+{% endblock %}

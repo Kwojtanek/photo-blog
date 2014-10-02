@@ -20,6 +20,7 @@ class Album(models.Model):
     def __unicode__(self):
         return self.tytul
 
+#noinspection PyUnresolvedReferences
 class Foto(models.Model):
     zdjecie = ImageWithThumbsField(upload_to='media/', sizes=((410,410),(1920,1080)), verbose_name= "Zdjęcie")
     glowna = models.BooleanField(default=False, verbose_name="Zdjęcie jest tak śliczne, że opublikuję je na głównej stronie")
@@ -36,43 +37,38 @@ class Foto(models.Model):
 
     def miniaturka(self):
         return """<a href="/media/%s"><img src="/media/%s.410x410.%s" /></a>""" % ((self.zdjecie.name, self.zdjecie.name[:-4],self.zdjecie.name[-3:]))
-    #By nie omijac tagow html
+        #By nie omijac tagow html
     miniaturka.allow_tags = True
 
-    def ISO(self):
+    def exif(self, meta):
         ret = {}
-        i = Image.open(os.path.join(MEDIA_ROOT, self.zdjecie.name))
+        img = Image.open(os.path.join(MEDIA_ROOT, self.zdjecie.name))
         try:
-            info = i._getexif()
+            info = img._getexif()
             for tag, value in info.items():
                 decoded = TAGS.get(tag, tag)
                 ret[decoded] = value
-            return ret['ISOSpeedRatings']
+            return ret[meta]
         except:
             return "Brak danych"
 
+
+    def ISO(self):
+        return self.exif('ISOSpeedRatings')
+
+
     def ekspozycja(self):
-        ret = {}
-        i = Image.open(os.path.join(MEDIA_ROOT, self.zdjecie.name))
-        try:
-            info = i._getexif()
-            for tag, value in info.items():
-                decoded = TAGS.get(tag, tag)
-                ret[decoded] = value
-            if ret['ExposureTime'][0] >= ret['ExposureTime'][1]:
-                return str(ret['ExposureTime'][0]/ret['ExposureTime'][1]) + ' sec'
-            else:
-                return str(ret['ExposureTime'][0]) + '/' + str(ret['ExposureTime'][1]) + ' sec'
-        except:
-            return "Brak Danych"
+        ekspozycja = self.exif('ExposureTime')
+
+        if ekspozycja[0] >= ekspozycja[1]:
+            return str(ekspozycja[0]/ekspozycja[1]) + ' sec'
+        else:
+            return str(ekspozycja[0]) + '/' + str(ekspozycja[1]) + ' sec'
+
     def f(self):
-        ret = {}
-        i = Image.open(os.path.join(MEDIA_ROOT, self.zdjecie.name))
-        try:
-            info = i._getexif()
-            for tag, value in info.items():
-                decoded = TAGS.get(tag, tag)
-                ret[decoded] = value
-            return 'F ' + str(float(ret['FNumber'][0])/float(ret['FNumber'][1]))
-        except:
-            return "Brak Danych"
+        f = self.exif('FNumber')
+
+        if float(f[0])/float(f[1]) != 0:
+            return float(f[0])/float(f[1])
+        else:
+            return "Brak danych"

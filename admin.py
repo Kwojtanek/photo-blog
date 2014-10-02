@@ -10,7 +10,7 @@ class AdminAlbum(admin.ModelAdmin):
     inlines = [FotoInline]
 
 class AdminFoto(admin.ModelAdmin):
-    list_display = ["data", 'albumy', 'miniaturka', "ISO", 'ekspozycja', 'f']
+    list_display = ["data", 'albumy', 'miniaturka','ISO', 'ekspozycja', 'f']
 
 admin.site.register(Album,AdminAlbum)
 admin.site.register(Foto, AdminFoto)

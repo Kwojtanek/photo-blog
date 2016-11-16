@@ -67,8 +67,11 @@ class Foto(models.Model):
 
     def f(self):
         f = self.exif('FNumber')
-
-        if float(f[0])/float(f[1]) != 0:
-            return float(f[0])/float(f[1])
+        #liczba f to stosunek ogniskowej do źrenicy wejściowej
+        #W danych EXIF jest przechowywany jako tuple
+        licznik = float(f[0])
+        mianownik = float(f[1])
+        if licznik and mianownik:
+            return licznik/mianownik
         else:
             return "Brak danych"
